@@ -1,4 +1,4 @@
-source("bottlenecks/simulation.R")
+source("simulation.R")
 library(scales)
 library(scico)
 library(gridExtra)
@@ -8,8 +8,8 @@ r_adj <- 1.023 # adjustment for non-infinitesmal step size
 r_res <- 1.5 # resource constrained growth rate
 media <- 1e9 # resource concentration in dilution media
 w <- 0.1 # average selective benefit
-fig_dir <- "C:/Users/s4528540/Documents/Oscar Honours/Honours/bottlenecks/figs"
-data_dir <- "C:/Users/s4528540/Downloads/results"
+fig_dir <- "figs"
+data_dir <- "data"
 
 custom_theme <- theme(
     axis.title = element_text(size = 25),
@@ -130,8 +130,8 @@ summary <- run_sims(summary, rep = 1e3, r = r * r_adj, w = w, res = FALSE)
 summary$theory <- theory(summary$D, summary$tau, r, w, k = 0)
 
 # Save the summary to a file
-save(summary, file = paste0(data_dir, "/fig_optimality_unconstrained.rdata"))
-load(paste0(data_dir, "/fig_optimality_unconstrained.rdata"))
+save(summary, file = paste0(data_dir, "/optimal.rdata"))
+load(paste0(data_dir, "/optimal.rdata"))
 
 # save the plot
 pdf(paste0(fig_dir, "/optimal.pdf"), width = 10, height = 10)
@@ -147,8 +147,8 @@ summary <- expand.grid(D = 10 ^ - seq(0.1, 4, by = 0.1), tau = 24 * 2 ^ - seq(0,
 summary <- run_sims(summary, rep = 1e3, r = r_res, res = TRUE)
 
 # Save the summary to a file
-save(summary, file = paste0(data_dir, "/fig_constrained.rdata"))
-load(paste0(data_dir, "/fig_constrained.rdata"))
+save(summary, file = paste0(data_dir, "/constrained.rdata"))
+load(paste0(data_dir, "/constrained.rdata"))
 # save the plot
 pdf(paste0(fig_dir, "/constrained.pdf"), width = 10, height = 10)
 constrained(summary)
@@ -184,8 +184,8 @@ summary <- run_sims(summary, rep = 2e3, r = r_res, res = TRUE)
 summary$theory <- theory(summary$D, summary$tau, r_res * 2)
 
 # Save the summary to a file
-save(summary, file = paste0(data_dir, "/fig_tau24.rdata"))
-load(paste0(data_dir, "/fig_tau24.rdata"))
+save(summary, file = paste0(data_dir, "/tau24.rdata"))
+load(paste0(data_dir, "/tau24.rdata"))
 # save the plot
 pdf(paste0(fig_dir, "/tau24.pdf"), width = 10, height = 10)
 base_plot(summary) +
@@ -204,8 +204,8 @@ summary <- run_sims(summary, rep = 1e3, time = 20, r = r_res, res = TRUE)
 summary$theory <- theory(summary$D, summary$tau, r_res * (1 + summary$k_ratio), k = 1e9 * summary$k_ratio)
 
 # Save the summary to a file
-save(summary, file = paste0(data_dir, "/fig_k_variation_optimal2.rdata"))
-load(paste0(data_dir, "/fig_k_variation_optimal2.rdata"))
+save(summary, file = paste0(data_dir, "/k_variation_optimal.rdata"))
+load(paste0(data_dir, "/k_variation_optimal.rdata"))
 # save the plot
 pdf(paste0(fig_dir, "/k_variation_optimal.pdf"), width = 10, height = 10)
 base_plot(summary) +
@@ -236,7 +236,7 @@ t_data <- final_counts %>%
     inner_join(mutation_times, by = c("rep", "variable"))
 
 # save the data
-save(t_data, file = paste0(data_dir, "/fig_t_distribution.rdata"))
+save(t_data, file = paste0(data_dir, "/t_distribution.rdata"))
 
 t_theory <- data.frame(
   t = seq(0, data[[2]]$tau, by = 0.001)
@@ -264,7 +264,7 @@ s_data <- final_counts %>%
     inner_join(data[[2]]$s_all, by = c("rep", "variable"))
 
 # save the data
-save(s_data, file = paste0(data_dir, "/fig_s_distribution.rdata"))
+save(s_data, file = paste0(data_dir, "/s_distribution.rdata"))
 
 s_theory <- data.frame(
   s = seq(0, 1, by = 0.001)
@@ -380,7 +380,7 @@ summary <- run_sims(summary, rep = 2e2, time = 1e3, r = r_res,
     loci = 4, num_mutants = NULL, res = TRUE, dt = 10, summarize = FALSE)
 
 # Save the summary to a file
-save(summary, file = paste0(data_dir, "/fig_ci.rdata"))
+save(summary, file = paste0(data_dir, "/ci.rdata"))
 
 # save the plot
 pdf(paste0(fig_dir, "/ci.pdf"), width = 10, height = 10)
