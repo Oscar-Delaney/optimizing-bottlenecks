@@ -367,9 +367,11 @@ pdf(paste0(fig_dir, "/methodology.pdf"), width = 10, height = 10)
 base_plot(summary) +
     geom_line(aes(x = D, y = rate, color = model, linetype = div_tau), linewidth = 1) +
     scale_color_manual(values = setNames(scico(4, palette = "roma"), label)) +
-    scale_linetype_manual(values = c("solid", "dotted")) +
-    labs(color = "model", linetype = "time-optimized") +
-    guides(color = guide_legend(nrow = 2), linetype = guide_legend(nrow = 2))
+    scale_linetype_manual(values = c("solid", "dotted"), labels = c("time", "transfers")) +
+    labs(color = "model", linetype = "optimize") +
+    guides(color = guide_legend(nrow = 2), linetype = guide_legend(nrow = 2)) +
+    theme(legend.text = element_text(size = 23),
+        legend.title = element_text(size = 23))
 dev.off()
 
 ### fig:ci
